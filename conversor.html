@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversor de Bases</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Conversor de Bases</h1>
+
+    <!-- Select para escolher a base de origem -->
+    <div class="input-group">
+      <label for="baseOrigem">Base de Origem:</label><br><br>
+      <select id="baseOrigem">
+        <option value="binario">Binário</option>
+        <option value="decimal">Decimal</option>
+        <option value="octal">Octal</option>
+        <option value="hexadecimal">Hexadecimal</option>
+      </select>
+    </div>
+
+    <!-- Campo para inserir o número a ser convertido -->
+    <div class="input-group">
+      <label for="numero">Número:</label><br><br>
+      <input id="numero" type="text" placeholder="Digite o número">
+    </div>
+
+    <!-- Select para escolher a base de destino -->
+    <div class="input-group">
+      <label for="baseDestino">Base de Destino:</label><br><br>
+      <select id="baseDestino">
+        <option value="decimal">Decimal</option>
+        <option value="binario">Binário</option>
+        <option value="octal">Octal</option>
+        <option value="hexadecimal">Hexadecimal</option>
+      </select>
+    </div><br>
+
+    <!-- Botão para acionar a função de conversão -->
+    <button onclick="converter()">Converter</button>
+
+    <!-- Div para exibir o resultado da conversão -->
+    <div id="resultado"></div>
+  </div>
+
+  <!-- Script JavaScript para realizar a conversão -->
+  <script>
+    function validarNumero(numero, base) {
+        const regexes = {
+            binario: /^[01]+$/,
+            decimal: /^[0-9]+$/,
+            octal: /^[0-7]+$/,
+            hexadecimal: /^[0-9A-Fa-f]+$/
+        };
+        return regexes[base].test(numero);
+    }
+
+    function converter() {
+        const baseOrigem = document.getElementById("baseOrigem").value;
+        const baseDestino = document.getElementById("baseDestino").value;
+        const numero = document.getElementById("numero").value;
+
+        let resultado;
+
+        try {
+            if (!validarNumero(numero, baseOrigem)) {
+                throw new Error('Número inválido para a base de origem');
+            }
+
+            if (baseOrigem === 'binario') {
+                resultado = parseInt(numero, 2);
+            } else if (baseOrigem === 'decimal') {
+                resultado = parseInt(numero, 10);
+            } else if (baseOrigem === 'octal') {
+                resultado = parseInt(numero, 8);
+            } else if (baseOrigem === 'hexadecimal') {
+                resultado = parseInt(numero, 16);
+            } else {
+                throw new Error('Base de origem inválida');
+            }
+
+            if (baseDestino === 'binario') {
+                resultado = resultado.toString(2);
+            } else if (baseDestino === 'decimal') {
+                resultado = resultado.toString(10);
+            } else if (baseDestino === 'octal') {
+                resultado = resultado.toString(8);
+            } else if (baseDestino === 'hexadecimal') {
+                resultado = resultado.toString(16).toUpperCase();
+            } else {
+                throw new Error('Base de destino inválida');
+            }
+
+            document.getElementById("resultado").innerText = `Resultado: ${resultado}`;
+        } catch (error) {
+            console.error('Erro ao converter:', error.message);
+            alert('Erro ao converter. Verifique os dados e tente novamente.');
+        }
+    }
+  </script>
+</body>
+</html>
